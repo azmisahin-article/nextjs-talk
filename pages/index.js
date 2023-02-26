@@ -1,7 +1,30 @@
+import { readPartner } from '@/lib/controllers'
 import Head from 'next/head'
 import Image from 'next/image'
 import logo from '../assets/logo.svg'
-export default function Home() {
+
+/**
+ * server side
+ * @param {*} context 
+ * @returns 
+ */
+export async function getServerSideProps(context) {
+  const response = await readPartner()
+  const data = await response
+
+  if (!data) {
+    return {
+      notFound: true,
+    }
+  }
+
+  return {
+    props: { data }, // will be passed to the page component as props
+  }
+
+}
+
+export default function Home({ data }) {
   return (
     <>
       <Head>
@@ -11,10 +34,18 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="container">
-        <figure>
-          <Image src={logo} width='32' height='32' alt='talk'></Image>
-          Talk
-        </figure>
+        <header className='d-flex justify-content-center py-3'>
+          <figure>
+            <Image src={logo} width='32' height='32' alt='talk'></Image>
+            <button type="button" class="position-relative">
+              Talkers
+              <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                {data.length}+
+                <span class="visually-hidden">unread messages</span>
+              </span>
+            </button>
+          </figure>
+        </header>
       </main>
     </>
   )
