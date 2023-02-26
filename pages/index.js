@@ -34,7 +34,7 @@ export async function getServerSideProps(context) {
 export default function Home({ partnerJSON, partnersJSON }) {
 
   var partner1 = partnerJSON
-  var partner2 = {}
+  var partner2 = { _id: null, calendar: null }
   const partners = partnersJSON
 
   return (
@@ -59,8 +59,26 @@ export default function Home({ partnerJSON, partnersJSON }) {
           </figure>
         </header>
         <section>
-          <h1>{partner1._id.toString()}</h1>
-          <h2>{new Date(partner1.calendar).toLocaleString()}</h2>
+          <div className='row'>
+            <div className='col-sm-6'>
+              <div className='card'>
+                <div className='card-body'>
+                  <h5 className='card-title'>{partner1._id}t</h5>
+                  <p className='card-text'>{new Date(partner1.calendar).toLocaleString()}</p>
+                  <a href="#" className='btn btn-success'>I am ready</a>
+                </div>
+              </div>
+            </div>
+            <div className='col-sm-6'>
+              <div className='card' style={{ display: partner2._id ? "block" : "none" }}>
+                <div className='card-body'>
+                  <h5 className='card-title'>{partner2._id}</h5>
+                  <p className='card-text'>{new Date(partner2.calendar).toLocaleString()}</p>
+                  <a href="#" className='btn btn-success'>Partner are ready</a>
+                </div>
+              </div>
+            </div>
+          </div>
         </section>
       </main>
     </>
