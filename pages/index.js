@@ -1,4 +1,5 @@
-import { readPartner } from '@/lib/controllers'
+import { createPartner, readPartner } from '@/lib/controllers'
+import { create } from '@/lib/helpers'
 import Head from 'next/head'
 import Image from 'next/image'
 import logo from '../assets/logo.svg'
@@ -9,22 +10,30 @@ import logo from '../assets/logo.svg'
  * @returns 
  */
 export async function getServerSideProps(context) {
-  const response = await readPartner()
-  const data = await response
+  const partnersResponse = await readPartner()
+  const partnerResponse = await createPartner({ "calendar": new Date() })
 
-  if (!data) {
+  if (!partnersResponse) {
     return {
       notFound: true,
     }
   }
 
+  // serialized as JSON
+  const partnersJSON = JSON.parse(JSON.stringify(partnersResponse))
+  const partnerJSON = JSON.parse(JSON.stringify(partnerResponse))
   return {
-    props: { data }, // will be passed to the page component as props
+    props: { partnersJSON, partnerJSON }, // will be passed to the page component as props
   }
 
 }
 
-export default function Home({ data }) {
+export default function Home({ partnersJSON, partnerJSON }) {
+
+  const partners = partnersJSON
+  var partner1 = partnerJSON
+  var partner2 = {}
+
   return (
     <>
       <Head>
@@ -33,19 +42,22 @@ export default function Home({ data }) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="container">
+      <main className='container'>
         <header className='d-flex justify-content-center py-3'>
           <figure>
             <Image src={logo} width='32' height='32' alt='talk'></Image>
-            <button type="button" class="position-relative">
+            <button type="button" className='position-relative'>
               Talkers
-              <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                {data.length}+
-                <span class="visually-hidden">unread messages</span>
+              <span className='position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger'>
+                {partners.length}+
+                <span className='visually-hidden'>unread messages</span>
               </span>
             </button>
           </figure>
         </header>
+        <section>
+          {partner1._id.toString()}
+        </section>
       </main>
     </>
   )
