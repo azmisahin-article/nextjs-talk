@@ -1,3 +1,12 @@
+/**
+ * @file Cross-origin resource sharing
+ * @author azmisahin@outlook.com
+ * @description Creating Node Js api using MongoDB.
+ * @see https://medium.com/@azmisahin/nodejs-mongodb-1cbf2cd8071c
+ * @see https://en.wikipedia.org/wiki/Cross-origin_resource_sharing
+ * @see https://github.com/expressjs/cors
+ * */
+
 import Cors from 'cors'
 import requestIp from 'request-ip'
 
