@@ -10,29 +10,32 @@ import logo from '../assets/logo.svg'
  * @returns 
  */
 export async function getServerSideProps(context) {
+  // first create
+  const partnerResponse = await createPartner()
+  // 
   const partnersResponse = await readPartner()
-  const partnerResponse = await createPartner({ "calendar": new Date() })
 
-  if (!partnersResponse) {
+  if (!partnerResponse) {
     return {
       notFound: true,
     }
   }
 
   // serialized as JSON
-  const partnersJSON = JSON.parse(JSON.stringify(partnersResponse))
   const partnerJSON = JSON.parse(JSON.stringify(partnerResponse))
+  const partnersJSON = JSON.parse(JSON.stringify(partnersResponse))
+
   return {
-    props: { partnersJSON, partnerJSON }, // will be passed to the page component as props
+    props: { partnerJSON, partnersJSON }, // will be passed to the page component as props
   }
 
 }
 
-export default function Home({ partnersJSON, partnerJSON }) {
+export default function Home({ partnerJSON, partnersJSON }) {
 
-  const partners = partnersJSON
   var partner1 = partnerJSON
   var partner2 = {}
+  const partners = partnersJSON
 
   return (
     <>
@@ -56,7 +59,8 @@ export default function Home({ partnersJSON, partnerJSON }) {
           </figure>
         </header>
         <section>
-          {partner1._id.toString()}
+          <h1>{partner1._id.toString()}</h1>
+          <h2>{new Date(partner1.calendar).toLocaleString()}</h2>
         </section>
       </main>
     </>
